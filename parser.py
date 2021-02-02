@@ -10,7 +10,7 @@ def getNum(string_num, nums):
             return gramaje
     return string_num
 
-def rollosTurno(privote, sheet, num_maquina):
+def rollosTurno(privote, sheet, num_maquina, num_turno):
     i = 14
     acc = 0
     suma_produccion = 0
@@ -30,7 +30,7 @@ def rollosTurno(privote, sheet, num_maquina):
                 if key in id_rollo:
                     uniones = numero_uniones[key]
                     id_rollo = id_rollo.replace(key, '')
-            print(int(float(id_rollo)), end=', ') #ID rollo
+            print("(" + str(int(float(id_rollo))), end=', ') #ID rollo
             print(str(num_maquina), end=", ") #num_maquina
             print("'" + getNum(sheet.cell_value(i, privote), gramajes) + "'", end=', ') #Gramaje
             print("'" + str(sheet.cell_value(i, privote+4)) + "'", end=', ') #Ancho
@@ -39,7 +39,12 @@ def rollosTurno(privote, sheet, num_maquina):
             print(almacen + ", " + str(uniones), end=', ') #Turno y uniones
             print(fecha, end=', ')  #Fecha
             print("'" + str(int(sheet.cell_value(i, privote+1))) + "'", end=', ') #Num_Cliente
-            print("'Almacen', '4', '1', '"+str(sheet.cell_value(i, privote+5))+"')")
+            if (num_turno == 1):
+                print("'Almacen', '4', '1', '"+str(sheet.cell_value(i, privote+5))+"')")
+            if (num_turno == 2):
+                print("'Almacen', '3', '2', '"+str(sheet.cell_value(i, privote+5))+"')")
+            if (num_turno == 3):
+                print("'Almacen', '2', '3', '"+str(sheet.cell_value(i, privote+5))+"')")
             acc += 1
             i += 1
     # print("Rollos del turno son -->", acc, " [", f"{suma_produccion:,}", "] kg")
@@ -55,8 +60,8 @@ def readExcel(path, num_maquina,days):
     
     for x in range(days):
         sheet = wb.sheet_by_index(x)    #Open the day sheet
-        total += rollosTurno(1, sheet, num_maquina)   #Turno 1
-        total += rollosTurno(8, sheet, num_maquina)   #Turno 2
-        total += rollosTurno(15, sheet,num_maquina)   #Turno 3
+        total += rollosTurno(1, sheet, num_maquina, 1)   #Turno 1
+        total += rollosTurno(8, sheet, num_maquina, 2)   #Turno 2
+        total += rollosTurno(15, sheet,num_maquina, 3)   #Turno 3
         # print()
     print("Produccion total = [" +  f"{total:,}" + "]kg")

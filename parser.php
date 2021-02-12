@@ -61,118 +61,76 @@ function galleta($ancho)
     return $ancho;
 }
 
+function remove_inv($id_rollo)
+{
+    $almacen = "2";
+    if (str_contains($id_rollo, "inv")) {
+        $almacen = "3";
+        $id_rollo = str_replace("inv", "", $id_rollo);
+    }
+    return [$almacen, $id_rollo];
+}
+
+function to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra)
+{
+    return '<tr><td>' . $id_rollo . ", " . $num_maquina . ", " . $gramaje . ", " . $ancho . ", " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", " . $num_cliente . ", " . $extra . '</td>' . PHP_EOL . '</tr>';
+     
+}
+
+function read($sheet, $num_maquina, $fecha_column, $limit_column, $id_rollo_column, $gamaje_column, $num_cliente_cloumn, $ancho_cloumn, $peso_column, $vel_column, $numTurno){
+    $highestRow      = $sheet->getHighestRow(); // e.g. 10
+    $highestColumn   = $sheet->getHighestColumn(); // e.g 'F'
+    $highestColumn++;
+    $x               = 15;
+    $acc             = 0;
+    $suma_produccion = 0;
+
+    $fecha = formatDate(strval($sheet->getCell($fecha_column . "10")->getValue()));
+    while (!str_contains(strval($sheet->getCell($limit_column . $x)->getValue()), "º") && $x < $highestRow) {
+        $id_rollo = strval($sheet->getCell($id_rollo_column . $x)->getValue());
+        if ($id_rollo == "") {
+            $x++;
+        } else {
+            $temp_inv    = remove_inv($id_rollo);
+            $almacen     = $temp_inv[0];
+            $id_rollo    = $temp_inv[1];
+            $temp        = getNumeroUniones($id_rollo);
+            $uniones     = $temp[1];
+            $id_rollo    = $temp[0];
+            $gramaje     = parsearGramaje(strval($sheet->getCell($gamaje_column . $x)->getValue()));
+            $num_cliente = strval($sheet->getCell($num_cliente_cloumn . $x)->getValue());
+            
+
+            $ancho = galleta(strval($sheet->getCell($ancho_cloumn . $x)->getValue()));
+            $peso  = (int)$sheet->getCell($peso_column . $x)->getValue();
+            $vel   = strval($sheet->getCell($vel_column . $x)->getValue());
+            $extra = "";
+            if ($numTurno == 1){
+                $extra = "'Almacen', '4', '1', '" . $vel . "'),";
+            } else if ($numTurno == 2){
+                $extra = "'Almacen', '3', '2', '" . $vel . "'),";
+            } else if ($numTurno == 3){
+                $extra = "'Almacen', '2', '3', '" . $vel . "'),";
+            }
+            echo to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra);
+            // echo '<tr><td>' . $id_rollo . ", " . $num_maquina . ", " . $gramaje . ", " . $ancho . ", " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", " . $num_cliente . ", " . $extra . '</td>' . PHP_EOL;
+            // echo '</tr>';
+            $suma_produccion += $peso;
+            $x++;
+        }
+    }
+    echo '<tr><td>' . $suma_produccion . '</td>' . PHP_EOL;
+    echo '</tr>';
+    
+}
+
 function rollosTurno($sheet, $num_maquina, $numTurno)
 {
     if ($numTurno == 1) {
-        $highestRow = $sheet->getHighestRow(); // e.g. 10
-        $highestColumn = $sheet->getHighestColumn(); // e.g 'F'
-        $highestColumn++;
-        $x = 15;
-        $acc = 0;
-        $suma_produccion = 0;
-
-        $fecha = formatDate(strval($sheet->getCell("E" . "10")->getValue()));
-        while (!str_contains(strval($sheet->getCell("B" . $x)->getValue()), "º") && $x < $highestRow) {
-            $id_rollo = strval($sheet->getCell("D" . $x)->getValue());
-            if ($id_rollo == "") {
-                $x++;
-            } else {
-                $almacen = "2";
-                $temp = getNumeroUniones($id_rollo);
-                $uniones = $temp[1];
-                $id_rollo = $temp[0];
-                $gramaje = parsearGramaje(strval($sheet->getCell("B" . $x)->getValue()));
-                $num_cliente = strval($sheet->getCell("C" . $x)->getValue());
-                if (str_contains($id_rollo, "inv")) {
-                    $almacen = "3";
-                    $id_rollo = str_replace("inv", "", $id_rollo);
-                }
-
-                $ancho = galleta(strval($sheet->getCell("F" . $x)->getValue()));
-                $peso  = (int)$sheet->getCell("E" . $x)->getValue();
-                $vel   = strval($sheet->getCell("G" . $x)->getValue());
-                $extra = "'Almacen', '4', '1', '" . $vel . "'),";
-                echo '<tr><td>' . $id_rollo . ", " . $num_maquina . ", " . $gramaje . ", " . $ancho . ", " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", " . $num_cliente . ", " . $extra . '</td>' . PHP_EOL;
-                echo '</tr>';
-                $suma_produccion += $peso;
-                $x++;
-            }
-        }
-        echo '<tr><td>' . $suma_produccion . '</td>' . PHP_EOL;
-        echo '</tr>';
+        read($sheet, $num_maquina, "E", "B", "D", "B", "C", "F", "E", "G", $numTurno);
     } else if ($numTurno == 2) {
-        $highestRow = $sheet->getHighestRow(); // e.g. 10
-        $highestColumn = $sheet->getHighestColumn(); // e.g 'F'
-        $highestColumn++;
-        $x = 15;
-        $acc = 0;
-        $suma_produccion = 0;
-
-        $fecha = formatDate(strval($sheet->getCell("E" . "10")->getValue()));
-        while (!str_contains(strval($sheet->getCell("I" . $x)->getValue()), "º") && $x < $highestRow) {
-            $id_rollo = strval($sheet->getCell("K" . $x)->getValue());
-            if ($id_rollo == "") {
-                $x++;
-            } else {
-                $almacen = "2";
-                $temp = getNumeroUniones($id_rollo);
-                $uniones = $temp[1];
-                $id_rollo = $temp[0];
-                $gramaje = parsearGramaje(strval($sheet->getCell("I" . $x)->getValue()));
-                $num_cliente = strval($sheet->getCell("J" . $x)->getValue());
-                if (str_contains($id_rollo, "inv")) {
-                    $almacen = "3";
-                    $id_rollo = str_replace("inv", "", $id_rollo);
-                }
-
-                $ancho = galleta(strval($sheet->getCell("M" . $x)->getValue()));
-                $peso  = (int)$sheet->getCell("L" . $x)->getValue();
-                $vel   = strval($sheet->getCell("N" . $x)->getValue());
-                $extra = "'Almacen', '3', '2', '" . $vel . "'),";
-                echo '<tr><td>' . $id_rollo . ", " . $num_maquina . ", " . $gramaje . ", " . $ancho . ", " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", " . $num_cliente . ", " . $extra . '</td>' . PHP_EOL;
-                echo '</tr>';
-                $suma_produccion += $peso;
-                $x++;
-            }
-        }
-        echo '<tr><td>' . $suma_produccion . '</td>' . PHP_EOL;
-        echo '</tr>';
+        read($sheet, $num_maquina, "E", "I", "K", "I", "J", "M", "L", "N", $numTurno);
     } else {
-        $highestRow = $sheet->getHighestRow(); // e.g. 10
-        $highestColumn = $sheet->getHighestColumn(); // e.g 'F'
-        $highestColumn++;
-        $x = 15;
-        $acc = 0;
-        $suma_produccion = 0;
-
-        $fecha = formatDate(strval($sheet->getCell("E" . "10")->getValue()));
-        while (!str_contains(strval($sheet->getCell("P" . $x)->getValue()), "º") && $x < $highestRow) {
-            $id_rollo = strval($sheet->getCell("R" . $x)->getValue());
-            if ($id_rollo == "") {
-                $x++;
-            } else {
-                $almacen = "2";
-                $temp = getNumeroUniones($id_rollo);
-                $uniones = $temp[1];
-                $id_rollo = $temp[0];
-                $gramaje = parsearGramaje(strval($sheet->getCell("P" . $x)->getValue()));
-                $num_cliente = strval($sheet->getCell("Q" . $x)->getValue());
-                if (str_contains($id_rollo, "inv")) {
-                    $almacen = "3";
-                    $id_rollo = str_replace("inv", "", $id_rollo);
-                }
-
-                $ancho = galleta(strval($sheet->getCell("T" . $x)->getValue()));
-                $peso  = (int)$sheet->getCell("S" . $x)->getValue();
-                $vel   = strval($sheet->getCell("U" . $x)->getValue());
-                $extra = "'Almacen', '2', '3', '" . $vel . "'),";
-                echo '<tr><td>' . $id_rollo . ", " . $num_maquina . ", " . $gramaje . ", " . $ancho . ", " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", " . $num_cliente . ", " . $extra . '</td>' . PHP_EOL;
-                echo '</tr>';
-                $suma_produccion += $peso;
-                $x++;
-            }
-        }
-        echo '<tr><td>' . $suma_produccion . '</td>' . PHP_EOL;
-        echo '</tr>';
+        read($sheet, $num_maquina, "E", "P", "R", "P", "Q", "T", "S", "U", $numTurno);
     }
 }

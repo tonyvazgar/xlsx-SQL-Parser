@@ -1,0 +1,38 @@
+label {
+    display: inline-block;
+    width: 200px;
+}
+
+table th {
+    text-align: center;
+}
+
+.table {
+    margin: auto;
+    width: 50% !important;
+}
+
+.no-border {
+    border: 0;
+    box-shadow: none;
+}
+
+input.transparent-input {
+    background-color: rgba(0, 0, 0, 0) !important;
+    border: none !important;
+    border: 0;
+    box-shadow: none;
+}
+
+.table-borderless>tbody>tr>td,
+.table-borderless>tbody>tr>th,
+.table-borderless>tfoot>tr>td,
+.table-borderless>tfoot>tr>th,
+.table-borderless>thead>tr>td,
+.table-borderless>thead>tr>th {
+    border: none;
+}
+
+img {
+    width: 100px;
+}

@@ -30,7 +30,7 @@ def rollosTurno(privote, sheet, num_maquina, num_turno):
     acc = 0
     suma_produccion = 0
     fecha = formatDate(meses, sheet.cell_value(9, 4))
-    print()
+    # print()
     while ("º" not in sheet.cell_value(i, privote)):
         id_rollo = str(sheet.cell_value(i, privote+2))
         ancho = str(sheet.cell_value(i, privote+4))
@@ -53,6 +53,8 @@ def rollosTurno(privote, sheet, num_maquina, num_turno):
 
             if "x" in ancho:
                 ancho = ancho.replace("x", '(') + ")"
+            if "X" in ancho:
+                ancho = ancho.replace("X", '(') + ")"
 
             print("'" + ancho + "'", end=', ')  # Ancho
 

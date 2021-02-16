@@ -27,13 +27,21 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload') {
             if (move_uploaded_file($fileTmpPath, $dest_path)) {
                 $message = 'File is successfully uploaded. <br>' . 'Filename: ' . $newFileName. '<br>' . 'Path: ' . $dest_path;
                 //------------------------------------------------------------------------------------------------------------------
+                $fecha   = $_POST['fecha'];
+                $maquina = $_POST['maquina'];
+
+                $sheet = idate('d', strtotime($fecha))+1;
+
+
+                $message .= $maquina . "----". $sheet;
                 $obj = \PhpOffice\PhpSpreadsheet\IOFactory::load($dest_path);
-                $worksheet = $obj->getSheet(0);
+                $worksheet = $obj->getSheet($sheet);
+                echo "La hoja es: ".$sheet;
 
                 echo '<table>' . "\n";
-                rollosTurno($worksheet, "2", 1);
-                rollosTurno($worksheet, "2", 2);
-                rollosTurno($worksheet, "2", 3);
+                rollosTurno($worksheet, $maquina, 1);
+                rollosTurno($worksheet, $maquina, 2);
+                rollosTurno($worksheet, $maquina, 3);
                 echo '</table>' . PHP_EOL;
                 //------------------------------------------------------------------------------------------------------------------
             } else {
@@ -50,4 +58,4 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload') {
     $message = 'Error: ' . $_FILES['uploadedFile']['error'];
 }
 $_SESSION['message'] = $message;
-header('Location: importar.php');
+// header('Location: importar.php');

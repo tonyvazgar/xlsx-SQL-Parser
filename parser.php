@@ -73,7 +73,8 @@ function remove_inv($id_rollo)
 
 function to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra)
 {
-    return '<tr><td>' . $id_rollo . ", " . $num_maquina . ", " . $gramaje . ", " . $ancho . ", " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", " . $num_cliente . ", " . $extra . '</td>' . PHP_EOL . '</tr>';
+    // (1610, 2, '350', '46.0', 460, 3, 2, '2021-02-12', '1112', 'Almacen', '3', '2', '60 B.RCT-MBC'),
+    return '<tr><td>INSERT INTO `rollo`(`ID`, `numMaquina`, `tipoPapel`, `ancho`, `peso`, `numAlmacen`, `numUniones`, `fechaFabricacion`, `cliente`, `inventariado`, `JefeTurno`, `Turno`, `Observaciones`) VALUES (' . $id_rollo . ", " . $num_maquina . ", '" . $gramaje . "', '" . $ancho . "', " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", '" . $num_cliente . "', " . $extra . '</td>' . PHP_EOL . '</tr>';
      
 }
 

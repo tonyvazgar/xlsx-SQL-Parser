@@ -30,7 +30,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload') {
                 $fecha   = $_POST['fecha'];
                 $maquina = $_POST['maquina'];
 
-                $sheet = idate('d', strtotime($fecha))+1;
+                $sheet = idate('d', strtotime($fecha))-1;
 
 
                 $message .= $maquina . "----". $sheet;

@@ -74,11 +74,12 @@ function remove_inv($id_rollo)
 function to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra)
 {
     // (1610, 2, '350', '46.0', 460, 3, 2, '2021-02-12', '1112', 'Almacen', '3', '2', '60 B.RCT-MBC'),
-    return '<tr><td>INSERT INTO `rollo`(`ID`, `numMaquina`, `tipoPapel`, `ancho`, `peso`, `numAlmacen`, `numUniones`, `fechaFabricacion`, `cliente`, `inventariado`, `JefeTurno`, `Turno`, `Observaciones`) VALUES (' . $id_rollo . ", " . $num_maquina . ", '" . $gramaje . "', '" . $ancho . "', " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", '" . $num_cliente . "', " . $extra . '</td>' . PHP_EOL . '</tr>';
+    return 'INSERT INTO `Rollo` (`ID`, `numMaquina`, `tipoPapel`, `ancho`, `peso`, `numAlmacen`, `numUniones`, `fechaFabricacion`, `cliente`, `inventariado`, `JefeTurno`, `Turno`, `Observaciones`) VALUES (' . $id_rollo . ", " . $num_maquina . ", '" . $gramaje . "', '" . $ancho . "', " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", '" . $num_cliente . "', " . $extra;
      
 }
 
 function read($sheet, $num_maquina, $fecha_column, $limit_column, $id_rollo_column, $gamaje_column, $num_cliente_cloumn, $ancho_cloumn, $peso_column, $vel_column, $numTurno){
+    $info = [];
     $highestRow      = $sheet->getHighestRow(); // e.g. 10
     $highestColumn   = $sheet->getHighestColumn(); // e.g 'F'
     $highestColumn++;
@@ -114,7 +115,7 @@ function read($sheet, $num_maquina, $fecha_column, $limit_column, $id_rollo_colu
                 } else if ($numTurno == 3){
                     $extra = "'Almacen', '2', '3', '" . $vel . "');";
                 }
-                echo to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra);
+                array_push($info, to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra));
                 // echo '<tr><td>' . $id_rollo . ", " . $num_maquina . ", " . $gramaje . ", " . $ancho . ", " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", " . $num_cliente . ", " . $extra . '</td>' . PHP_EOL;
                 // echo '</tr>';
                 $suma_produccion += $peso;
@@ -122,21 +123,20 @@ function read($sheet, $num_maquina, $fecha_column, $limit_column, $id_rollo_colu
             }else{
                 $x++;
             }
-            
         }
     }
-    echo '<tr><td>' . $suma_produccion . '</td>' . PHP_EOL;
+    echo '<tr><td> Peso turno '.$numTurno. ' es: [' . $suma_produccion . ']</td>' . PHP_EOL;
     echo '</tr>';
-    
+    return $info;
 }
 
 function rollosTurno($sheet, $num_maquina, $numTurno)
 {
     if ($numTurno == 1) {
-        read($sheet, $num_maquina, "E", "B", "D", "B", "C", "F", "E", "G", $numTurno);
+        return read($sheet, $num_maquina, "E", "B", "D", "B", "C", "F", "E", "G", $numTurno);
     } else if ($numTurno == 2) {
-        read($sheet, $num_maquina, "E", "I", "K", "I", "J", "M", "L", "N", $numTurno);
+        return read($sheet, $num_maquina, "E", "I", "K", "I", "J", "M", "L", "N", $numTurno);
     } else {
-        read($sheet, $num_maquina, "E", "P", "R", "P", "Q", "T", "S", "U", $numTurno);
+        return read($sheet, $num_maquina, "E", "P", "R", "P", "Q", "T", "S", "U", $numTurno);
     }
 }

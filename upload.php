@@ -2,6 +2,7 @@
 session_start();
 require 'vendor/autoload.php';
 require 'parser.php';
+require 'alta.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $message = '';
@@ -38,11 +39,15 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload') {
                 $worksheet = $obj->getSheet($sheet);
                 echo "La hoja es: ".$sheet;
 
-                echo '<table>' . "\n";
-                rollosTurno($worksheet, $maquina, 1);
-                rollosTurno($worksheet, $maquina, 2);
-                rollosTurno($worksheet, $maquina, 3);
-                echo '</table>' . PHP_EOL;
+                // echo '<table>' . "\n";
+                $primer_turno  = rollosTurno($worksheet, $maquina, 1);
+                $segundo_turno = rollosTurno($worksheet, $maquina, 2);
+                $tercer_turno  = rollosTurno($worksheet, $maquina, 3);
+
+                $general = [$primer_turno, $segundo_turno, $tercer_turno];
+
+                subir($general);
+                // echo '</table>' . PHP_EOL;
                 //------------------------------------------------------------------------------------------------------------------
             } else {
                 $message = 'There was some error moving the file to upload directory. Please make sure the upload directory is writable by web server.';

@@ -34,6 +34,20 @@
                             </tr>
                             <th scope="row" colspan="4">
                                 <h3 class='display-1 text-center'>Selecciona la fecha y máquina:</h3>
+                                <?php
+                                    include "../../almacen/lib/conexion.php";
+                                    $ultimo = 0;
+                                    $fecha  = "";
+                                    $turno  = "";
+                                    $consulta = "SELECT * from Rollo WHERE numMaquina='$num_maquina'AND YEAR(fechaFabricacion) = YEAR(CURDATE()) AND Rollo.inventariado!='ReemAlta' AND Rollo.Observaciones!='REEMBOBINADO' ORDER BY ABS(`Rollo`.`ID`) DESC LIMIT 1";
+                                    $resultado = mysqli_query($con, $consulta) or die("Algo ha ido mal en la consulta a la base de datos");
+                                    while ($fila = mysqli_fetch_assoc($resultado)) {
+                                        $ultimo = $fila['ID'];
+                                        $fecha  = $fila['fechaFabricacion'];
+                                        $turno  = $fila['Turno'];
+                                    }
+                                    echo '<h4 class="display-1 text-center">Último rollo M'.$num_maquina.': #' . number_format($ultimo) .' del '. $fecha .' en el turno '. $turno .'</h4>';
+                                ?>
                             </th>
                             <tr>
                                 <td colspan="3">

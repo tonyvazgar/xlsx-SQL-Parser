@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 require 'parser.php';
 require 'alta.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -22,7 +22,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload') {
 
         if (in_array($fileExtension, $allowedfileExtensions)) {
             // directory in which the uploaded file will be moved
-            $uploadFileDir = './uploaded_files/';
+            $uploadFileDir = '../uploaded_files/';
             $dest_path     = $uploadFileDir . $newFileName;
 
             if (move_uploaded_file($fileTmpPath, $dest_path)) {
@@ -46,7 +46,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload') {
 
                 $general = [$primer_turno, $segundo_turno, $tercer_turno];
 
-                subir($general);
+                subir($general, $maquina);
                 // echo '</table>' . PHP_EOL;
                 //------------------------------------------------------------------------------------------------------------------
             } else {
@@ -62,5 +62,5 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload') {
     $message = 'Hubo un error al cargar el archivo, Please check the following error.<br>';
     $message = 'Error: ' . $_FILES['uploadedFile']['error'];
 }
-$_SESSION['message'] = $message;
+// $_SESSION['message'] = $message;
 // header('Location: importar.php');

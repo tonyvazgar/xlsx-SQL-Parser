@@ -21,7 +21,7 @@
                     echo '<h1 class="display-1 text-center">Importar producción M'.$num_maquina.' desde archivo</h1>';
                 ?>
                 <div class="container">
-                <form method="POST" action="../upload.php" enctype="multipart/form-data">
+                <form method="POST" action="../include/upload.php" enctype="multipart/form-data">
                     <table class="table table-borderless text-center" frame='box'>
                         <tbody>
                             <th scope="row" colspan="4">

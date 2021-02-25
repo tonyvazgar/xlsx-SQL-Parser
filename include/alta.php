@@ -5,31 +5,51 @@
         $message = '';
         foreach($produccion as $turno){
             foreach($turno as $registro){
-                // echo "<br>";
-                // print_r($registro);
-                $resultado = mysqli_query($con, $registro);
-                if ($resultado) {
-                    // header("Location: ../lib/pdf/imprimir.php?&id=$id&numMaquina=$maquina&fecha=$fecha");
-                    echo "<h4>Registo insertado con exito!</h4>";
+                $parsed_data = '';
+                for ($i=0; $i < sizeof($registro); $i++) { 
+                    if($i == sizeof($registro)-1){
+                        $parsed_data .= "'" . $registro[$i] . "');";
+                    }else{
+                        $parsed_data .= "'" . $registro[$i] . "', ";
+                    }
+                }
+                $query = "INSERT INTO `Rollo` (`ID`, `numMaquina`, `tipoPapel`, `ancho`, `peso`, `numAlmacen`, `numUniones`, `fechaFabricacion`, `cliente`, `inventariado`, `JefeTurno`, `Turno`, `Observaciones`) VALUES (" . $parsed_data;
+                echo $query . "<br>";
+                
+                //-------------------------- SI SIRVE --------------------------
+                $resultado = mysqli_query($con, $query);
+                if (mysqli_affected_rows($con) > 0)  {
+                    $link     = '../../almacen/lib/pdf/imprimir.php?&id='.$registro[0].'&numMaquina='.$registro[1].'&fecha='.$registro[7];
+                    $message .= '<script type="text/javascript">window.open("';
+                    $message .= $link;
+                    $message .= '", "_blank");</script>';
                 } else {
                     // or die('<h2> Error --> '.mysqli_error($con).'</h2>');
                     //echo '<label> Hubo un error --> '.mysqli_error($con).'<label>';
                     array_push($errores, mysqli_error($con));
                 }
+                //---------------------------------------------------------------
             }
             echo "<br>";
         }
+
+        //-------------------------- SI SIRVE --------------------------
         if(sizeof($errores) > 0){
-            echo '<h3>Errores en:</h3>';
-            echo '<br>';
+            $message .= '<h2 class="display-2 text-center text-danger">Errores en:</h2>';
+            $message .=  '<br>';
             foreach($errores as $error){
-                echo '<h4>'.$error.'</h4>';
-                echo '<br>';
+                $message .=  '<h2 class="display-2 text-center text-danger">'.$error.'</h2>';
+                $message .=  '<br>';
             }
+            $_SESSION['message'] = $message;
+            header('Location: ../index.php?id='.$maquina);
         }else{
-            $message = 'Toda la producción fue dada de alta con éxito!';
+            //$message = 'Toda la producción fue dada de alta con éxito!';
+
+            $message .= '<h1 class="display-1 text-center text-success">Toda la producción fue dada de alta con éxito!</h1>';
             $_SESSION['message'] = $message;
             header('Location: ../index.php?id='.$maquina);
         }
+        //---------------------------------------------------------------
     }
 ?>

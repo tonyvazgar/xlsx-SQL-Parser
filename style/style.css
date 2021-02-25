@@ -36,3 +36,12 @@ input.transparent-input {
 img {
     width: 100px;
 }
+
+.footer {
+    background: transparent;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 16px;
+}

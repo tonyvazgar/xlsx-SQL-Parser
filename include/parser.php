@@ -48,7 +48,7 @@ function formatDate($fecha)
             $month = $v;
         }
     }
-    return "'" . $year . "-" . $month . "-" . $day . "'";
+    return $year . "-" . $month . "-" . $day;
 }
 
 function galleta($ancho)
@@ -109,15 +109,14 @@ function read($sheet, $num_maquina, $fecha_column, $limit_column, $id_rollo_colu
                 $vel   = strval($sheet->getCell($vel_column . $x)->getValue());
                 $extra = "";
                 if ($numTurno == 1){
-                    $extra = "'Almacen', '4', '1', '" . $vel . "');";
+                    $data = [$id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, 'Almacen', '4', '1', $vel];
                 } else if ($numTurno == 2){
-                    $extra = "'Almacen', '3', '2', '" . $vel . "');";
+                    $data = [$id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, 'Almacen', '3', '2', $vel];
                 } else if ($numTurno == 3){
-                    $extra = "'Almacen', '2', '3', '" . $vel . "');";
+                    $data = [$id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, 'Almacen', '2', '3', $vel];
                 }
-                array_push($info, to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra));
-                // echo '<tr><td>' . $id_rollo . ", " . $num_maquina . ", " . $gramaje . ", " . $ancho . ", " . $peso . ", " . $almacen . ", " . $uniones . ", " . $fecha . ", " . $num_cliente . ", " . $extra . '</td>' . PHP_EOL;
-                // echo '</tr>';
+                // array_push($info, to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra));
+                array_push($info, $data);
                 $suma_produccion += $peso;
                 $x++;
             }else{

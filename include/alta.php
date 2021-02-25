@@ -14,7 +14,6 @@
                     }
                 }
                 $query = "INSERT INTO `Rollo` (`ID`, `numMaquina`, `tipoPapel`, `ancho`, `peso`, `numAlmacen`, `numUniones`, `fechaFabricacion`, `cliente`, `inventariado`, `JefeTurno`, `Turno`, `Observaciones`) VALUES (" . $parsed_data;
-                echo $query . "<br>";
                 
                 //-------------------------- SI SIRVE --------------------------
                 $resultado = mysqli_query($con, $query);
@@ -24,8 +23,6 @@
                     $message .= $link;
                     $message .= '", "_blank");</script>';
                 } else {
-                    // or die('<h2> Error --> '.mysqli_error($con).'</h2>');
-                    //echo '<label> Hubo un error --> '.mysqli_error($con).'<label>';
                     array_push($errores, mysqli_error($con));
                 }
                 //---------------------------------------------------------------
@@ -44,8 +41,6 @@
             $_SESSION['message'] = $message;
             header('Location: ../index.php?id='.$maquina);
         }else{
-            //$message = 'Toda la producción fue dada de alta con éxito!';
-
             $message .= '<h1 class="display-1 text-center text-success">Toda la producción fue dada de alta con éxito!</h1>';
             $_SESSION['message'] = $message;
             header('Location: ../index.php?id='.$maquina);

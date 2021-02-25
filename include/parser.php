@@ -115,7 +115,6 @@ function read($sheet, $num_maquina, $fecha_column, $limit_column, $id_rollo_colu
                 } else if ($numTurno == 3){
                     $data = [$id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, 'Almacen', '2', '3', $vel];
                 }
-                // array_push($info, to_string($id_rollo, $num_maquina, $gramaje, $ancho, $peso, $almacen, $uniones, $fecha, $num_cliente, $extra));
                 array_push($info, $data);
                 $suma_produccion += $peso;
                 $x++;
@@ -124,8 +123,6 @@ function read($sheet, $num_maquina, $fecha_column, $limit_column, $id_rollo_colu
             }
         }
     }
-    echo '<tr><td> Peso turno '.$numTurno. ' es: [' . $suma_produccion . ']</td>' . PHP_EOL;
-    echo '</tr>';
     return $info;
 }
 

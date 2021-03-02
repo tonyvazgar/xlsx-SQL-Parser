@@ -79,12 +79,12 @@ def rollosTurno(privote, sheet, num_maquina, num_turno):
     return suma_produccion
 
 
-def readExcel(path, num_maquina, days):
+def readExcel(path, num_maquina, fistDay, LastDay):
     xlsx_path = (path)
     wb = xlrd.open_workbook(xlsx_path)
     total = 0  # total sum of production in the machine
 
-    for x in range(days):
+    for x in range(fistDay, LastDay):
         sheet = wb.sheet_by_index(x)  # Open the day sheet
         total += rollosTurno(1, sheet, num_maquina, 1)  # Turno 1
         total += rollosTurno(8, sheet, num_maquina, 2)  # Turno 2

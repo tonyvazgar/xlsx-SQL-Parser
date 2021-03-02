@@ -1,3 +1,3 @@
 import parser
 
-parser.readExcel("REP. PRODUCCION M-1 Febrero  2021.xlsx", 2, 12)
+parser.readExcel("python/m2.xlsx", 2, 26, 29)

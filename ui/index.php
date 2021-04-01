@@ -2,7 +2,7 @@
     $num_maquina = isset($_GET["id"]) ? $_GET["id"] : 0;
     if ($num_maquina == 1 or $num_maquina == 2){
         session_start(); 
-        ?>
+?>
         <!DOCTYPE html>
         <html>
             <head>
@@ -39,11 +39,17 @@
                                         $ultimo = 0;
                                         $fecha  = "";
                                         $turno  = "";
-                                        $consulta = "SELECT * from Rollo WHERE numMaquina='$num_maquina'AND YEAR(fechaFabricacion) = YEAR(CURDATE()) AND Rollo.inventariado!='ReemAlta' AND Rollo.Observaciones!='REEMBOBINADO' ORDER BY ABS(`Rollo`.`ID`) DESC LIMIT 1";
+                                        $consulta = "SELECT * 
+                                                     FROM Rollo 
+                                                     WHERE numMaquina='$num_maquina'
+                                                     AND YEAR(fechaFabricacion) = YEAR(CURDATE()) 
+                                                     AND Rollo.inventariado!='ReemAlta' 
+                                                     AND Rollo.Observaciones!='REEMBOBINADO' 
+                                                     ORDER BY ABS(`Rollo`.`ID`) DESC LIMIT 1";
                                         $resultado = mysqli_query($con, $consulta) or die("Algo ha ido mal en la consulta a la base de datos");
                                         while ($fila = mysqli_fetch_assoc($resultado)) {
-                                            $ultimo = $fila['ID'];
-                                            $fecha  = $fila['fechaFabricacion'];
+                                            $ultimo = intval($fila['ID']);
+                                            $fecha  = date($fila['fechaFabricacion']);
                                             $turno  = $fila['Turno'];
                                         }
                                         echo '<h4 class="display-1 text-center">Último rollo M'.$num_maquina.': #' . number_format($ultimo) .' del '. $fecha .' en el turno '. $turno .'</h4>';

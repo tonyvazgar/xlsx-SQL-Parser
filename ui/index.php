@@ -60,8 +60,12 @@
                                         <!-- <input type="file" name="uploadedFile" class="form-control" /> -->
                                         <?php
                                             $first = date('Y-m-01');
+                                            $second = date('Y-m-02');
                                             $today = date("Y-m-d");
                                             $last  = date("Y-m-d", strtotime($today));
+                                            if($today == $first || $today == $second){
+                                                $first = date('Y-m-d', strtotime(' -3 day'));
+                                            }
                                             echo '<input type="date" id="fecha" name="fecha" value='.$today.' min='.$first.' max='.$last.' class="form-control text-center">';
                                         ?>
                                     </td>
@@ -87,10 +91,11 @@
                                 $gitStr        = file_get_contents($gitBasePath . '/HEAD');
                                 $gitBranchName = rtrim(preg_replace("/(.*?\/){2}/", '', $gitStr));
                                 $gitPathBranch = $gitBasePath . '/refs/heads/' . $gitBranchName;
-                                $gitHash       = file_get_contents($gitPathBranch);
+                                $gitHash       = substr(file_get_contents($gitPathBranch), 0 , 7);
                                 $gitDate       = date(DATE_ATOM, filemtime($gitPathBranch));
-
-                                echo "<p>$gitBranchName ==>[$gitHash]</p>";
+                                $localIP       = $_SERVER['HTTP_HOST'];
+                    
+                                echo "<p>IP: [$localIP] | V: [$gitBranchName] ==> C: [$gitHash]</p>";
                             ?>
                         </div>
                     </div>

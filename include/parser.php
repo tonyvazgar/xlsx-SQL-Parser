@@ -94,6 +94,7 @@ function read($sheet, $num_maquina, $fecha_column, $limit_column, $id_rollo_colu
             $x++;
         } else {
             $gramaje     = parsearGramaje(strval($sheet->getCell($gamaje_column . $x)->getValue()));
+            $num_maquina = strval($sheet->getCell($gamaje_column . $x)->getValue())[0];
             if ($gramaje != ""){
                 $temp_inv    = remove_inv($id_rollo);
                 $almacen     = $temp_inv[0];

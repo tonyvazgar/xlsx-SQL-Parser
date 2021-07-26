@@ -64,10 +64,12 @@ function galleta($ancho)
 function remove_inv($id_rollo)
 {
     $almacen = "2";
-    if (str_contains($id_rollo, "inv")) {
+    if (str_contains($id_rollo, "inv") or str_contains($id_rollo, "INV")) {
         $almacen = "3";
         $id_rollo = str_replace("inv", "", $id_rollo);
+        $id_rollo = str_replace("INV", "", $id_rollo);
     }
+    $id_rollo = str_replace(' ', '', $id_rollo);
     return [$almacen, $id_rollo];
 }
 

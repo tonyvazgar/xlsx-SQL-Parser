@@ -44,7 +44,8 @@
                                                      WHERE numMaquina='$num_maquina'
                                                      AND YEAR(fechaFabricacion) = YEAR(CURDATE()) 
                                                      AND Rollo.inventariado!='ReemAlta' 
-                                                     AND Rollo.Observaciones!='REEMBOBINADO' 
+                                                     AND Rollo.Observaciones!='REEMBOBINADO'
+                                                     AND Rollo.Observaciones!='DEVOLUCION' 
                                                      ORDER BY ABS(`Rollo`.`ID`) DESC LIMIT 1";
                                         $resultado = mysqli_query($con, $consulta) or die("Algo ha ido mal en la consulta a la base de datos");
                                         while ($fila = mysqli_fetch_assoc($resultado)) {
@@ -59,12 +60,15 @@
                                     <td colspan="3">
                                         <!-- <input type="file" name="uploadedFile" class="form-control" /> -->
                                         <?php
-                                            $first = date('Y-m-01');
+                                            $first  = date('Y-m-01');
                                             $second = date('Y-m-02');
-                                            $today = date("Y-m-d");
-                                            $last  = date("Y-m-d", strtotime($today));
-                                            if($today == $first || $today == $second){
-                                                $first = date('Y-m-d', strtotime(' -3 day'));
+                                            $third  = date('Y-m-03');
+                                            $fourth = date('Y-m-04');
+                                            $fifth  = date('Y-m-05');
+                                            $today  = date("Y-m-d");
+                                            $last   = date("Y-m-d", strtotime($today));
+                                            if($today == $first || $today == $second|| $today == $third|| $today == $fourth|| $today == $fifth){
+                                                $first = date('Y-m-d', strtotime(' -10 day'));
                                             }
                                             echo '<input type="date" id="fecha" name="fecha" value='.$today.' min='.$first.' max='.$last.' class="form-control text-center">';
                                         ?>
